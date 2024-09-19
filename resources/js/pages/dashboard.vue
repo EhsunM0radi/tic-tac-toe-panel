@@ -9,6 +9,7 @@ const data = ref([])
 const columns = [
   { name: 'id', label: 'ID' },
   { name: 'token', label: 'Token' },
+  { name: "final_map", label: "Map" },
 ]
 
 // دریافت داده‌ها از API لاراول
