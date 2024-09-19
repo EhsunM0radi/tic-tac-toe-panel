@@ -1,4 +1,5 @@
 <script setup>
+import LogoutButton from '@/components/auth/LogoutButton.vue'
 import avatar1 from '@images/avatars/avatar-1.png'
 </script>
 
@@ -48,7 +49,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              John Doe
+              ehsan
             </VListItemTitle>
             <VListItemSubtitle>Admin</VListItemSubtitle>
           </VListItem>
@@ -65,17 +66,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
           <!-- Divider -->
           
           <!-- 👉 Logout -->
-          <VListItem to="/login">
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="ri-logout-box-r-line"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>Logout</VListItemTitle>
-          </VListItem>
+          <LogoutButton />
         </VList>
       </VMenu>
       <!-- !SECTION -->

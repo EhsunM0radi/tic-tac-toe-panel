@@ -20,14 +20,6 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
   <!-- 👉 User Interface -->
   
   <!-- 👉 Forms & Tables -->
-  
-  <VerticalNavLink
-    :item="{
-      title: 'Tables',
-      icon: 'ri-table-alt-line',
-      to: '/tables',
-    }"
-  />
 
   <!-- 👉 Others -->
 </template>

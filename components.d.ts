@@ -12,6 +12,7 @@ declare module 'vue' {
     CardStatisticsWithImages: typeof import('./resources/js/@core/components/cards/CardStatisticsWithImages.vue')['default']
     CustomFixedHeaderTable: typeof import('./resources/js/components/tables/CustomFixedHeaderTable.vue')['default']
     ErrorHeader: typeof import('./resources/js/components/ErrorHeader.vue')['default']
+    LogoutButton: typeof import('./resources/js/components/auth/LogoutButton.vue')['default']
     MoreBtn: typeof import('./resources/js/@core/components/MoreBtn.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

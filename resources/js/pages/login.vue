@@ -1,5 +1,7 @@
 <script setup>
+import { ref, computed } from 'vue'
 import { useTheme } from 'vuetify'
+import axios from 'axios'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import logo from '@images/logo.svg?raw'
 import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
@@ -20,26 +22,42 @@ const authThemeMask = computed(() => {
 })
 
 const isPasswordVisible = ref(false)
+const loading = ref(false)
+const errorMessage = ref('')
+
+// Function to handle login
+const handleLogin = async () => {
+  loading.value = true
+  errorMessage.value = ''
+
+  try {
+    const response = await axios.post('http://tic-tac-toe-panel.test/api/auth/login', {
+      email: form.value.email,
+      password: form.value.password,
+    })
+
+    const { accessToken, token_type } = response.data
+
+    // Store the token in localStorage or any preferred storage
+    localStorage.setItem('accessToken', `${token_type} ${accessToken}`)
+
+    // Redirect user after successful login
+    // You can adjust the route based on your application's logic
+    window.location.href = '/'
+  } catch (error) {
+    errorMessage.value = error.response?.data?.message || 'Login failed. Please try again.'
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 
 <template>
-  <!-- eslint-disable vue/no-v-html -->
-
   <div class="auth-wrapper d-flex align-center justify-center pa-4">
-    <VCard
-      class="auth-card pa-4 pt-7"
-      max-width="448"
-    >
+    <VCard class="auth-card pa-4 pt-7" max-width="448">
       <VCardItem class="justify-center">
-        <RouterLink
-          to="/"
-          class="d-flex align-center gap-3"
-        >
-          <!-- eslint-disable vue/no-v-html -->
-          <div
-            class="d-flex"
-            v-html="logo"
-          />
+        <RouterLink to="/" class="d-flex align-center gap-3">
+          <div class="d-flex" v-html="logo" />
           <h2 class="font-weight-medium text-2xl text-uppercase">
             Materio
           </h2>
@@ -47,27 +65,17 @@ const isPasswordVisible = ref(false)
       </VCardItem>
 
       <VCardText class="pt-2">
-        <h4 class="text-h4 mb-1">
-          Welcome to Materio! 👋🏻
-        </h4>
-        <p class="mb-0">
-          Please sign-in to your account and start the adventure
-        </p>
+        <h4 class="text-h4 mb-1">Welcome to Materio! 👋🏻</h4>
+        <p class="mb-0">Please sign-in to your account and start the adventure</p>
       </VCardText>
 
       <VCardText>
-        <VForm @submit.prevent="() => {}">
+        <VForm @submit.prevent="handleLogin">
           <VRow>
-            <!-- email -->
             <VCol cols="12">
-              <VTextField
-                v-model="form.email"
-                label="Email"
-                type="email"
-              />
+              <VTextField v-model="form.email" label="Email" type="email" />
             </VCol>
 
-            <!-- password -->
             <VCol cols="12">
               <VTextField
                 v-model="form.password"
@@ -78,59 +86,29 @@ const isPasswordVisible = ref(false)
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"
               />
 
-              <!-- remember me checkbox -->
               <div class="d-flex align-center justify-space-between flex-wrap my-6">
-                <VCheckbox
-                  v-model="form.remember"
-                  label="Remember me"
-                />
-
-                <a
-                  class="text-primary"
-                  href="javascript:void(0)"
-                >
-                  Forgot Password?
-                </a>
+                <VCheckbox v-model="form.remember" label="Remember me" />
+                <a class="text-primary" href="javascript:void(0)">Forgot Password?</a>
               </div>
 
-              <!-- login button -->
-              <VBtn
-                block
-                type="submit"
-                to="/"
-              >
+              <VBtn :loading="loading" block type="submit">
                 Login
               </VBtn>
+              <span v-if="errorMessage" class="text-danger">{{ errorMessage }}</span>
             </VCol>
 
-            <!-- create account -->
-            <VCol
-              cols="12"
-              class="text-center text-base"
-            >
+            <VCol cols="12" class="text-center text-base">
               <span>New on our platform?</span>
-              <RouterLink
-                class="text-primary ms-2"
-                to="/register"
-              >
-                Create an account
-              </RouterLink>
+              <RouterLink class="text-primary ms-2" to="/register">Create an account</RouterLink>
             </VCol>
 
-            <VCol
-              cols="12"
-              class="d-flex align-center"
-            >
+            <VCol cols="12" class="d-flex align-center">
               <VDivider />
               <span class="mx-4">or</span>
               <VDivider />
             </VCol>
 
-            <!-- auth providers -->
-            <VCol
-              cols="12"
-              class="text-center"
-            >
+            <VCol cols="12" class="text-center">
               <AuthProvider />
             </VCol>
           </VRow>
@@ -138,23 +116,9 @@ const isPasswordVisible = ref(false)
       </VCardText>
     </VCard>
 
-    <VImg
-      class="auth-footer-start-tree d-none d-md-block"
-      :src="authV1Tree"
-      :width="250"
-    />
-
-    <VImg
-      :src="authV1Tree2"
-      class="auth-footer-end-tree d-none d-md-block"
-      :width="350"
-    />
-
-    <!-- bg img -->
-    <VImg
-      class="auth-footer-mask d-none d-md-block"
-      :src="authThemeMask"
-    />
+    <VImg class="auth-footer-start-tree d-none d-md-block" :src="authV1Tree" :width="250" />
+    <VImg :src="authV1Tree2" class="auth-footer-end-tree d-none d-md-block" :width="350" />
+    <VImg class="auth-footer-mask d-none d-md-block" :src="authThemeMask" />
   </div>
 </template>
 
